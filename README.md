@@ -1,2 +1,5 @@
-# psyReg2019
-Study Group : Regression Analysis
+# PsyReg2019
+
+Regression Analysis for Psychologists!
+
+By @[Psychorism](https://psychorism.github.io)

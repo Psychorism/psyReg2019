@@ -6,7 +6,7 @@ By @[Psychorism](https://psychorism.github.io)
 
 ## Study Schedule 
 
-### Material
+### Textbook
 
  `Introduction to Linear Regression Analysis` (by Montgomery, Peck, Vining).
 
@@ -27,4 +27,8 @@ Week|Content
 
 ### Kaggle
 
+Kaggle for in-practice data analysis in parallel with the textbook.
+
 [Titanic](https://www.kaggle.com/c/titanic) Data Analysis
+
+ 

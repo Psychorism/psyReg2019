@@ -2,11 +2,9 @@
 
 Regression Analysis Group Study for Psychologists. Planned Jan 2019 - Feb 2019.
 
-
-## Study Schedule 
-
 By @[Psychorism](https://psychorism.github.io)
 
+## Study Schedule 
 
 ### Material
 

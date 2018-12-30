@@ -1,4 +1,4 @@
-# PsyReg2019
+# PsyReg2019 : Regression for Psychologists
 
 Regression Analysis Group Study for Psychologists. Planned Jan 2019 - Feb 2019.
 
@@ -29,4 +29,4 @@ Week|Content
 
 ### Kaggle
 
-Planning : [Titanic](https://www.kaggle.com/c/titanic), [PUBG](https://www.kaggle.com/c/pubg-finish-placement-prediction)
+[Titanic](https://www.kaggle.com/c/titanic) Data Analysis

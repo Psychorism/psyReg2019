@@ -1,0 +1,494 @@
+
+\documentclass[12pt]{article} 
+
+\usepackage{geometry}
+\geometry{a4paper} 
+
+\usepackage{graphicx} 
+\usepackage{enumitem}
+\usepackage{booktabs}
+
+\usepackage{float} 
+\usepackage{wrapfig} 
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{dsfont}
+
+
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{caption}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{%
+  \parbox{\textwidth}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}\vskip-2pt}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+\lstset{frame=lrb,xleftmargin=\fboxsep,xrightmargin=-\fboxsep}
+
+
+\linespread{1.2} 
+
+\setlength\parindent{0pt} % Uncomment to remove all indentation from paragraphs
+
+
+
+
+\begin{document}
+
+\title{\textbf{Simple Linear Regression-2}}
+\author{Hyunwoo Gu}
+\date{}
+
+\maketitle
+
+
+\setcounter{section}{8}
+%----------------------------------------------------------------------------------------
+%	Section 9
+%----------------------------------------------------------------------------------------
+\section{Some Considerations in the Use of Regression}
+
+1. Regression models are intended as \textbf{interpolation equations} over the range of the regressors.
+
+\bigskip
+\bigskip
+
+2. \textbf{The disposition of the $x$ values} plays an important role in the LS fit. 
+
+\bigskip
+\bigskip
+
+3. \textbf{Outliers} are observations that differ considerably from the rest of the data. They can seriously disturb the LS fit. Outliers sometimes may be a highly useful piece of evidence concerning the process under investigation. 
+
+\bigskip
+\bigskip
+
+4. \textbf{Causality} implies necessary correlation. Regression analysis can only address the issues on correlation. 
+
+\bigskip
+\bigskip
+
+5. Sometimes the regressor $x$ to predict $y$ is unknown. In this case, the prediciton is \textbf{conditional} on the regressor random variable. The accuracy of the interested prediction depends on the accuracy of the prediction of $x$.
+
+\bigskip
+\bigskip
+
+
+
+\pagebreak
+%----------------------------------------------------------------------------------------
+%	Section 10
+%----------------------------------------------------------------------------------------
+\section{Regression Through the Origin}
+
+A \textbf{no-intercept regression model} often seems appropriate in analyzing data. 
+
+$$
+y = \beta_1 x + \epsilon
+$$
+
+Given $n$ observations of $(y_i, x_i)$, the LS function is 
+
+$$
+S(\beta_1) = \sum (y_i - \beta_1 x_i)^2
+$$
+
+thereby the only normal equation is 
+
+$$
+\hat{\beta}_1 \sum x_i^2 = \sum y_i x_i
+$$
+
+Using the matrix notation, 
+
+$$
+\begin{aligned}
+\hat{\beta}_1 &= (X'X)^{-1}X'y = \frac{\sum y_i x_i}{\sum x_i^2} \\[10pt]
+\hat{\sigma^2} &= \mathrm{MS}_{Res} &= y' (I-H) y / (n-p) \\[10pt]
+&= \frac{\sum y_i^2 - \hat{\beta}_1 \sum y_i x_i}{n-1}
+\end{aligned}
+$$
+
+since $h_{ii} = (x_i - \bar{x})/S_{xx}$.
+
+
+Making the \textbf{normality assumption} on the errors, the \textbf{$100(1-\alpha)$ CI on $\beta_1$}, the \textbf{$100(1-\alpha)$ CI on $\mathbb{E}(y|x_0)$}, and the \textbf{$100(1-\alpha)$ PI on a future observation $y_0$ at $x=x_0$} are 
+
+$$
+\hat{\beta}_1 - t_{\alpha/2, n-1} \sqrt{ \frac{MS_{Res}}{\sum x_i^2}  } \le \beta_1 \le \hat{\beta}_1 + t_{\alpha/2, n-1} \sqrt{ \frac{MS_{Res}}{\sum x_i^2}  } \\[10pt]
+$$
+$$
+\hat{\mu}_{y|x_0} - t_{\alpha/2, n-1} \sqrt{\frac{x_0^2 MS_{Res}}{\sum x_i^2}   } \le \mathbb{E} (y|x_0) \le \hat{\mu}_{y|x_0} + t_{\alpha/2, n-1} \sqrt{\frac{x_0^2 MS_{Res}}{\sum x_i^2}   }  \\[10pt]
+$$
+$$
+\hat{y}_0 - t_{\alpha/2}(n-1) \sqrt{ MS_{Res}\left( 1 + \frac{x_0^2}{\sum x_i^2} \right)} \le y_0 \le \hat{y}_0 + t_{\alpha/2}(n-1) \sqrt{ MS_{Res}\left( 1 + \frac{x_0^2}{\sum x_i^2} \right)} 
+$$
+
+Note that both CI and PI widen as $x_0$ increases, and the length of CI is zero when $x=0$.
+
+Generally $R^2$ is not a good comparative statistic for the two models. Since the fundamental ANOVA identity becomes
+
+$$
+\sum y_i^2 = \sum \hat{y}_i^2 + \sum (y_i - \hat{y}_i)^2
+$$
+
+since $\hat{y}_i \perp y_i - \hat{y}_i$. So the \textbf{no intercept model analog} of $R^2$ is as follows
+
+$$
+R_0^2 = \frac{\sum \hat{y}_i^2 }{ \sum y_i^2}
+$$
+
+$R_0^2$ indicates the proportion of variability around the \textbf{origin} accounted for by regression. Occationally $R_0^2 > R^2$, since $R_0^2$ is computed in an uncorrected way. Alternatively,
+
+$$
+R_{0'}^2 = 1 - \frac{\sum (y_i - \hat{y}_i)^2 }{\sum (y_i - \bar{y})^2 } \\[8pt]
+$$
+
+where the value could be negative. 
+
+\pagebreak
+%----------------------------------------------------------------------------------------
+%	Section 11
+%----------------------------------------------------------------------------------------
+\section{Estimation by Maximum Likelihood}
+
+\textbf{The method of least-squares} can be used regardless of the distribution of the errors $\epsilon$, producing BLUEs of $\beta_0, \beta_1$. If the form of the distribution of the errors is known, an alternative method of parameter estimation, \textbf{the method of maximum likelihood} can be used. 
+
+
+$$
+\begin{aligned}
+	L(\beta_0, \beta_1, \sigma^2; y_i, x_i) &= \prod_i^n (2\pi \sigma^2)^{-1/2} \mathrm{exp} \left[ - \frac{1}{2 \sigma^2} (y_i - \beta_0 - \beta_1 x_i)^2 \right] \\[8pt]
+	&= (2\pi \sigma^2)^{-n/2} \mathrm{exp} \left[ - \frac{1}{2 \sigma^2} \sum (y_i - \beta_0 - \beta_1 x_i)^2 \right] \\[10pt]
+	l(\beta_0, \beta_1, \sigma^2; y_i, x_i) &= - (\frac{n}{2}) \mathrm{ln}2 \pi - (\frac{n}{2}) \mathrm{ln}\sigma^2 \\[8pt]
+	&= - (\frac{1}{2\sigma^2}) \sum (y_i -\beta_0 - \beta_1 x_i)^2
+\end{aligned}
+$$
+
+
+By differentiating, we get
+
+$$
+\begin{aligned}
+\tilde{\beta}_0 &= \bar{y} - \tilde{\beta}_1 \bar{x}  \\[8pt]
+\tilde{\beta}_1 &= \frac{S_{xy}}{S_{xx}} \\[10pt]
+\tilde{\sigma^2} &= \frac{\sum (y_i - \tilde{\beta}_0 - \tilde{\beta}_1 x_i )^2 }{n}
+\end{aligned}
+$$
+
+\textbf{Maximum-likelihood estimators} have the better \textbf{statistical properties} than LS estimators. They are
+
+\begin{itemize}
+	\item \textbf{Asymptotically unbiased}
+	\item \textbf{Asymptotically Minimum variance} among unbiased estimators
+	\item \textbf{Consistency} in most cases.
+	\item \textbf{Sufficiency} if MLE is unique.
+\end{itemize}
+
+However, MLEs require a full distributional assumption, whereas LSEs require only second-moment assumptions(i.e. \textbf{expected value} and \textbf{variance} among random errors). 
+
+
+
+%----------------------------------------------------------------------------------------
+%	Section 12
+%----------------------------------------------------------------------------------------
+\section{Case Where the Regressor $\mathbf{x}$ is Random}
+
+
+\subsection{$\mathbf{x}$ and $\mathbf{y}$ Jointly Distributed}
+
+Suppose that $x$ and $y$ are jointly distributed random variables but the form is unknown. 
+
+All of the regression procdures are unchanged, if the following hold:
+
+\begin{itemize}
+	\item $y | x \sim N(\beta_0 + \beta_1 x, \sigma^2)$
+	\item $x'$s are independent random variables whose distribution does not involve $\beta_0, \beta_1, \sigma^2$
+\end{itemize}
+
+However, the confidence coefficients and statistical errors have a different interpretation, where they apply to repeated sampling of $(x_i, y_i)$ values and not to repeated sampling of $y_i$ at fixed levels of $x_i$. 
+
+
+\subsection{$\mathbf{x}$ and $\mathbf{y}$ Jointly Normal: Correlation Model}
+
+(Refer to the \textbf{MATLAB Example $\approx$ Problem2.23.})
+
+Consider the \textbf{bivariate normal distribution}, where
+
+$$
+f(y,x) = \frac{1}{2 \pi \sigma_1 \sigma_2 \sqrt{1 - \rho^2}} \mathrm{exp} \left\{ -\frac{1}{2(1-\rho^2)} \right\}
+$$
+
+Note that the correlation coefficient is as follows
+
+$$
+\rho = \frac{\mathbb{E} \left[ (y- \mu_1)(y- \mu_2) \right]}{\sigma_1 \sigma_2}
+$$
+
+To find \textbf{conditional distribution} of $y$ for given $x$, first note that 
+
+$$
+\begin{aligned}
+\begin{bmatrix} X - \mu_X \\ Y - \mu_Y - \Sigma_{21} \Sigma_{11}^{-1} (X - \mu_X) \end{bmatrix} &= \begin{bmatrix} I & 0 \\  - \Sigma_{21} \Sigma_{11}^{-1} & I \end{bmatrix}  \begin{bmatrix} X - \mu_X \\ Y - \mu_Y \end{bmatrix} \\[10pt]
+\begin{bmatrix} I & 0 \\  - \Sigma_{21} \Sigma_{11}^{-1} & I \end{bmatrix} \begin{bmatrix} \Sigma_{11} & \Sigma_{12} \\ \Sigma_{21} & \Sigma_{22} \end{bmatrix} \begin{bmatrix} I & 0 \\  - \Sigma_{21} \Sigma_{11}^{-1} & I \end{bmatrix}' &= \begin{bmatrix} \Sigma_{11} & 0 \\ 0 & \Sigma_{22} \end{bmatrix}
+\end{aligned}
+$$
+
+
+\bigskip
+Therefore, 
+
+$$
+\begin{aligned}
+f(y | x) &= \frac{1}{\sqrt{2 \pi} \sigma_{2|1}} \mathrm{exp} \left[  -\frac{1}{2} \left( \frac{y - \beta_0 - \beta_1x}{\sigma_{2|1}^2} \right) \right] \\[8pt]
+\beta_0 &= \mu_1 - \mu_2 \rho \frac{\sigma_1}{\sigma_2} \\[8pt]
+\beta_1 &= \frac{\sigma_1}{\sigma_2} \rho \\[8pt]
+\sigma_{2|1}^2 &= \sigma_1^2 (1- \rho^2) \\[10pt]
+\therefore \ \ y|x &\sim N\left( \beta_0 + \beta_1 x, \sigma_{2|1}^2 \right)
+\end{aligned}
+$$
+
+Note that the mean of the \textbf{conditional distribution} of $y$ given $x$ is a straight-line regression model. Furthermore, if $\rho=0$, then $\beta_1 = 0$. 
+
+\bigskip
+
+The \textbf{MLE} of the parameters are given as follows.
+
+$$
+\begin{aligned}
+\hat{\beta}_0 &= \bar{y} - \hat{\beta}_1 \bar{x} \\[8pt]
+\hat{\beta}_1 &= \frac{S_{xy}}{S_{xx}} \\[10pt]
+r &:= \hat{\rho} = \frac{S_{xy}}{ \left[ S_{xx}SS_T \right]^{1/2}}
+\end{aligned}
+$$
+
+Note that 
+
+$$
+\begin{aligned}
+\hat{\beta}_1 &= \left(\frac{S_{yy}}{S_{xx}} \right)^{1/2} r \\[10pt]
+r^2 &= \hat{\beta}_1^2 \frac{S_{xx}}{SS_T} = \frac{SS_R}{SS_T} = R^2
+\end{aligned}
+$$
+
+so that the slope is just the sample correlation $r$ multiplied by a scale facter composed of the spreads of $x$ and $y$. The sample correlatino $r$ is a measure of the \textbf{linear association} between $y$ and $x$, while $\hat{\beta}_1$ measures the change in the mean of $y$ for a unit change in $x$.
+
+Under the $H_0 : \rho = 0$,
+
+$$
+t_0 = \frac{r\sqrt{n-2}}{\sqrt{1 - r^2}} \sim t(n-2)
+$$
+
+thus rejecting $H_0$ if $|t_0| > t_{\alpha/2}(n-2)$. Note that this is equivalent to testing $H_0 : \beta_1 = 0$. 
+
+\bigskip
+
+Let us first consider $\xi_i := (X_i, Y_i, X_iY_i, X_i^2, Y_i^2)$, and WLOG assume $\mu_X = \mu_Y =0$, and $\sigma_X = \sigma_Y = 1$. By CLT,
+
+$$
+\sqrt{n} \left( \bar{\xi} - \mathbb{E}(\xi) \right) \approx N_5(0, Var(\xi)) 
+$$
+
+and defining $g(t_1, \cdots, t_5) := (t_3 - t_1 t_2) (t_4 - t_1^2)^{-1/2} (t_5 - t_2^2) ^{-1/2}$ and applying the \textbf{$\Delta$-method}, we get
+
+$$
+\sqrt{n} (\hat{\rho}_n - \rho) \approx N(0, Var(X_1 Y_1 - \frac{\rho^2}{2} X_1^2-  \frac{\rho^2}{2} Y_1^2) = N(0, (1-\rho^2)^2)
+$$
+
+Let us now consider the test
+
+$$
+H_0 : \rho = \rho_0, \ \ H_1 : \rho \neq \rho_0
+$$
+
+Since the parameter $\rho$ is not available to us, to test $H_0$ we should \textbf{transform the variance of the limiting distribution so that it does not depend on parameter}. This procedure is called the \textbf{variance stabilizing transformtion}. 
+
+Especiall,define $Z := \mathrm{arctanh}(r) = \frac{1}{2} \mathrm{ln} \frac{1+r}{1-r} $ and apply \textbf{$\Delta$-method}, and we get 
+
+$$
+Z \approx N\left(\frac{1}{2} \mathrm{ln} \frac{1+\rho}{1-\rho}), (n-3)^{-1} \right)
+$$
+
+Therefore, to test $H_0 : \rho = \rho_0$, we may compute the test stat $Z_0$, and $100(1-\alpha)$ CI as follows.
+
+$$
+\begin{aligned}
+&Z_0 = (\mathrm{arctanh}(r) - \mathrm{arctanh}(\rho_0))(n-3)^{-1} \\[10pt]
+&\mathrm{tanh} \left( \mathrm{arctanh}(r) - \frac{Z_{\alpha/2}}{\sqrt{n-3}} \right) \le \rho \le \mathrm{tanh} \left( \mathrm{arctanh}(r) + \frac{Z_{\alpha/2}}{\sqrt{n-3}} \right)
+\end{aligned}
+$$
+
+where $\mathrm{tanh}(u) := (e^u - e^{-u})/(e^u + e^{-u})$.
+
+
+\pagebreak
+%----------------------------------------------------------------------------------------
+%	Problems
+%----------------------------------------------------------------------------------------
+
+\section*{Problems}
+
+\subsubsection*{Problem 2.27.} Suppose we have fit $\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x_1$, but the response is also affected by $x_2$ such that the true regression function is 
+
+$$
+\mathbb{E}(y) = \beta_0 + \beta_1 x_1 + \beta_2 x_2
+$$
+
+\textbf{Is the LSE of the slope of the original model \textbf{unbiased}? Show the bias.}
+
+\bigskip
+
+False. Note that $\hat{\beta}_1 = \frac{S_{xy}}{S_{xx}} = y$, and $\mathbb{E}(y) = \beta_0 + \beta_1 x_1 + \beta_2 x_2$. Thus $$\beta_1 - \mathbb{E} (\hat{\beta}_1 ) = - \frac{\sum (x_{i1} - \bar{x})x_{i2}}{S_{xx}}$$
+
+
+\subsubsection*{Problem 2.29.} Suppose we are fitting a straight line and wish to make SE of slope as small as possible. Suppose the ROI for $x$ is $-1 \le x \le 1$. \textbf{Where sould observations $x_1, \cdots, x_n$ be taken?}
+
+\bigskip
+
+\subsubsection*{Problem 2.33.} Consider the LS residuals $e_i = y_i - \hat{y}_i$ from simple regression. \textbf{Find $Var(e_i)$, and discuss whether it is constant.}
+
+\bigskip
+
+We have
+
+$$
+\begin{aligned}
+\mathrm{Var}(e_i) &= \mathrm{Var}(y_i) + \mathrm{Var}(\hat{y}_i) - 2 \mathrm{Cov}(y_i, \hat{y}_i) \\[8pt]
+&= \sigma^2 (1 - 1/n - (x_i - \bar{x})^2/S_{xx})
+\end{aligned}
+$$
+
+\pagebreak
+%----------------------------------------------------------------------------------------
+%	Kaggle
+%----------------------------------------------------------------------------------------
+
+\section*{Kaggle: On Categorical Variables}
+
+\setcounter{section}{1}
+\setcounter{subsection}{0}
+
+
+\subsection{Switched Linear Regression}
+
+\textbf{$t$ statistics for testing the significance of the coefficient}, i.e. $H_0 : \beta = 0$ \textbf{are the same} in the following two simple normal-linear regression models: 
+
+\begin{itemize}
+	\item 1. Linear regression where $\mathbf{y}$ is explained by $\mathbf{x}$
+	\item 2. Linear regression where $\mathbf{x}$ is explained by $\mathbf{y}$
+\end{itemize}
+
+Note that the test statistics are 
+
+$$
+\begin{aligned}	
+t_1 &= \frac{\hat{\beta_1}}{\sqrt{\mathrm{MSE}_X/S_{xx}}} = \frac{S_{xy}}{\sqrt{\mathrm{MSE}_X \times S_{xx}}} \\[8pt]
+t_2 &= \frac{\hat{\beta_2}}{\sqrt{\mathrm{MSE}_Y/S_{yy}}} = \frac{S_{xy}}{\sqrt{\mathrm{MSE}_Y \times S_{yy}}}
+\end{aligned}
+$$
+
+and observe 
+
+$$
+\begin{aligned}
+\mathrm{SSE}_X &= SS_{xx} - (SS_{xy})^2/SS_{xx} \\
+\mathrm{SSE}_Y &= SS_{yy} - (SS_{xy})^2/SS_{yy} \\ 
+\end{aligned}
+$$
+
+
+\subsection{Regression Approach to ANOVA (8.3.)}
+
+\textbf{ANOVA} is a technique frequently used to analyze data from \textbf{planned/designed experiments}. \textbf{ANOVA} explains the variation of the observations of a characteristic $X$ by a single factor, each level of whose is called a \textbf{treatment}. 
+
+$$
+\begin{aligned}
+X_{ij} &= \bar{\mu} + \tau_i + \epsilon_{ij} \\[10pt]
+\end{aligned}
+$$
+
+where $\sum_i^k n_i \tau_i = 0, \epsilon_{ij} \sim NID(0, \sigma^2)$ and $i = 1, \cdots, k, j=1, \cdots, n_i$. Main problem is to test whether all $\tau_i'$s are equal, i.e., there is no \textbf{treatment effect}.
+
+\textbf{Any ANOVA problem can be treated as a regression problem where all of the regressors are indicator variables}. To show this, let
+
+$$
+\begin{aligned}
+X &= \begin{bmatrix} 1_{n_1} & 1_{n_1} & 0 & \cdots & 0 \\
+					 1_{n_2} & 0 & 1_{n_1} & \cdots & 0 \\ 
+					 \vdots  &   &         & \ddots & \vdots \\
+					 1_{n_k} & 0 & 0       & \cdots & 1_{n_k} \end{bmatrix} \\[10pt]
+Y &= \left(X_{11}, \cdots, X_{1n_1}; \cdots; X_{k1}, \cdots, X_{kn_k} \right)' \\[8pt]
+\epsilon &= \left( \epsilon_{11}, \cdots, \epsilon_{1n_1}; \cdots; \epsilon_{k1}, \cdots, \epsilon_{kn_k} \right)' \\[8pt]
+\beta &= \left( \bar{\mu}, \tau_1, \cdots, \tau_k \right)' \\[8pt]
+c &= \left( 0, n_1, \cdots, n_k\right)
+\end{aligned}
+$$
+
+
+then it becomes clear that the model has the alternative form
+
+$$
+\begin{aligned}
+Y &= X\beta + \epsilon\\[8pt]
+c' \beta &= 0 \\[8pt]
+\epsilon &\sim N_n (0, \sigma^2 I)
+\end{aligned}
+$$
+
+where $X$ is called a \textbf{design matrix}. Note that 
+
+$$
+\begin{aligned}
+SS_R (\beta) &= \hat{\beta}' X' y \\[8pt]
+SS_{Res} &= \sum_i \sum_j (y_{ij} - \bar{y}_i)^2 \\[8pt]
+F_0 &= \frac{SS_R(\beta_1, \cdots, \beta_k | \beta_0)/k}{SS_{Res}/(n-k-1)} = \frac{MS_{Treat}}{MS_{Res}}
+\end{aligned}
+$$
+
+
+Under the null $H_0 : \tau_1 = \cdots = \tau_k = 0$, 
+
+$$F_0 \sim F(k, n-k-1)$$
+
+
+\subsection{ANOVA is \textit{t}-test when $k=2$}
+
+Note that in \textbf{ANOVA}, $F_0 = \frac{MST}{MS_{Res}}$, and in \textbf{\textit{t}-test}, $t = \frac{(\bar{y}_1 - \bar{y}_2)^2} {S_p^2 (1/n_1 + 1/n_2)}$. Let us show the two are equivalent.
+
+First note that 
+
+$$
+\begin{aligned}
+MS_{Res} &= \frac{SSE}{n-2} = \frac{\sum_i^2 \sum_j^{n_i} (y_{ij} - \bar{y}_i)^2}{n-2} \\[8pt]
+&= \frac{(n_1 - 1)S_1^2 + (n_2 - 1)S_2^2}{n_1 + n_2 - 2} = S_p^2
+\end{aligned}
+$$
+
+since $S_i^2 = \frac{\sum_j^{n_i} (y_{ij} - \bar{y}_i)^2}{n_i - 1}$ and $n = n_1 + n_2$.
+
+Next, note that 
+
+$$
+\begin{aligned}
+MST &= SST = \sum_i^2 n_i (\bar{y}_i - \bar{y})^2 \\[8pt]
+&= n_1 \left( \bar{y}_1 - \frac{n_1\bar{y}_1 + n_2 \bar{y}_2}{n} \right)^2 + n_2 \left( \bar{y}_2 - \frac{n_1\bar{y}_1 + n_2 \bar{y}_2}{n} \right)^2 \\[8pt]
+&= \frac{n_1 n_2^2}{n^2} (\bar{y}_1 - \bar{y}_2)^2 + \frac{n_2 n_1^2}{n^2} (\bar{y}_1 - \bar{y}_2)^2 \\[8pt]
+&= \frac{1}{1/n_1 + 1/n_2} (\bar{y}_1 - \bar{y}_2)^2
+\end{aligned}
+$$
+
+where the transition from the second to third line makes sense since, WLOG,
+
+$$
+n_1 \left( \bar{y}_1 - \frac{n_1\bar{y}_1 + n_2 \bar{y}_2}{n} \right)^2 = n_1 \left( \frac{(n-n_1) \bar{y}_1 - n_2 \bar{y}_2}{n} \right)^2
+$$
+
+
+Therefore, by combining the knowledge that $T^2 \sim F$, we get the \textbf{equivalence}.
+
+
+
+
+
+
+\end{document}

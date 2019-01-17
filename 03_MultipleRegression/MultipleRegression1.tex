@@ -1,0 +1,588 @@
+
+\documentclass[12pt]{article} 
+
+\usepackage{geometry}
+\geometry{a4paper} 
+
+\usepackage{graphicx} 
+\usepackage{enumitem}
+\usepackage{booktabs}
+
+\usepackage{float} 
+\usepackage{wrapfig} 
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{dsfont}
+
+
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{caption}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{%
+  \parbox{\textwidth}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}\vskip-2pt}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+\lstset{frame=lrb,xleftmargin=\fboxsep,xrightmargin=-\fboxsep}
+
+
+\linespread{1.2} 
+
+\setlength\parindent{0pt} % Uncomment to remove all indentation from paragraphs
+
+
+
+
+\begin{document}
+
+\title{\textbf{Multiple Linear Regression I}}
+\author{Hyunwoo Gu}
+\date{}
+
+\maketitle
+
+
+%----------------------------------------------------------------------------------------
+%	Section 1
+%----------------------------------------------------------------------------------------
+\section{Multiple Regression Models}
+
+In general, the \textbf{response} y may be related to $k$ \textbf{regressors} or \textbf{predictor variables}. The \textbf{multiple linear regression model} with $k$ regressors is as follows.  
+
+$$
+y = \beta_0 + \beta_1 x_1 + \cdots + \beta_k x_k + \epsilon
+$$
+
+The parameters $\beta_j (j=0, \cdots, k)$ are called the \textbf{regression coefficients}, which define a hyperplane in the $k$-dimensional space of the regressors $x_j$. The parameter $\beta_j$ represents the expected change in the response $y$ per unit change in $x_j$ \textbf{when all of the remaining regressors $x_i (i \neq j)$ are held constant}, thus the names \textbf{partial regression coefficients}.  
+
+In general, \textbf{any regression model that is linear in the parameters is a linear regression model, regardless of the shape of the surface it generates}.  
+
+
+\pagebreak
+%----------------------------------------------------------------------------------------
+%	Section 2
+%----------------------------------------------------------------------------------------
+\section{Estimation of the Model Parameters}
+
+% 3.2.1. -----------------------------------------------------------------
+\subsection{Least-Squares Estimation of the Regression Coefficients}
+
+The \textbf{method of least squares} can be used to estimate the regression coefficients. 
+
+Note that 
+
+$$
+\begin{aligned}
+Y - X\beta&= H (Y - X\beta) + (I - H) Y \\[10pt]
+\therefore \ \  || Y - X\beta ||^2 &= ||H (Y-X\beta)||^2 + ||(I-H)Y||^2
+\end{aligned}
+$$
+
+since $H' (I-H) = 0$, thus $2(H(Y-X\beta)' (I-H))Y = 0$.
+
+Therefore, we have $X \hat{\beta}^{LSE} = H Y$, and $\hat{\beta}^{LSE} = (X'X)^{-1} X' Y$, under the assumption that $(X'X)^{-1}$ exists. $(X'X)^{-1}$ will always exist if the regressors are \textbf{linearly independent}. 
+
+
+% 3.2.2. -----------------------------------------------------------------
+
+\subsection{A Geometrical Interpretation of Least Squares}
+
+We may think of the vector of observations $y' = [y_1, \cdots, y_n] $ as defining a vector from the origin. Define $X : n \times p$, such that, for example, $(k+1)$ vectors : $\mathds{1}, x_1, \cdots, x_k$, each of which defines a vector from the origin in the sample space. These $p$ vectors form a $p$-dimensional subspace called the \textbf{estimation space}. 
+
+Note that minimizing the squared distance of point $A$ defined by the observation vector $y$ to the estimation space requires finding the point in the estimation space closest to $A$. We may write
+
+$$
+X' (y - X \hat{\beta}) = 0
+$$
+
+which is the \textbf{least-squares normal equations}.
+
+% 3.2.3. -----------------------------------------------------------------
+
+\subsection{Properties of the Least-Squares Estimators}
+
+Note that $\mathbb{E} (\hat{\beta} ) = \beta$, since $\mathbb{E} (\epsilon) = 0$, and for the variance
+
+$$
+\begin{aligned}
+\mathrm{Cov}(\hat{\beta}) &= Var[ (X'X)^{-1} X' y]   \\[8pt]
+&= \sigma^2 (X'X)^{-1}
+\end{aligned}
+$$
+
+By the \textbf{Gauss-Markov theorem}, we have $\hat{\beta}^{LSE}$ is the BLUE of $\beta$, and if we further assume that $\epsilon_i$ are normally distributed, then $\hat{\beta}^{LSE}$ is also the \textbf{MLE}. Furthermore, they are the \textbf{UMVUE}s.
+
+
+% 3.2.4. -----------------------------------------------------------------
+
+\subsection{Estimation of $\sigma^2$}
+
+$$
+\begin{aligned}
+SS_{Res} &= \left( y - X \hat{\beta}  \right)' \left( y - X \hat{\beta}  \right) \\[8pt]
+&= y'y - 2 \hat{\beta}' X' y + \hat{\beta} X' X \hat{\beta} \\[8pt]
+&= y'y - \hat{\beta}' X' y \\[10pt]
+\hat{\sigma^2}^{UE} &=  MS_{Res} = \frac{SS_{Res}}{n-p}
+\end{aligned}
+$$
+
+which is clearly \textbf{model-dependent}. 
+
+
+% 3.2.5. -----------------------------------------------------------------
+
+\subsection{Inadequacy of Scatter Diagrams in Multiple Regression}
+
+Consider the data generated from the equation
+
+$$
+y = 8 - 5 x_1 = 12 x_2
+$$
+
+where the scatter diagrams convey erroneous information, even the only two regressors operating in a perfectly additive fashion with no noise. If there is only one dominant regressor, or if the regressors operate nearly independently, the matrix of scatter plots is most useful. 
+
+
+% 3.2.6. -----------------------------------------------------------------
+
+\subsection{Maximum Likelihood Estimation}
+
+We would like to find the MLE using the log-likelihood 
+
+$$
+\mathrm{ln} L (y, X, \beta, \sigma^2) = -\frac{n}{2} \mathrm{ln} (2\pi) - n \mathrm{ln}(\sigma) - \frac{1}{\sigma^2} ( y- X\beta)' (y - X\beta)
+$$
+
+
+thus 
+
+$$
+\begin{aligned}
+\hat{\beta}^{MLE} &= \hat{\beta}^{LSE} = (X'X)^{-1}X'y \\[8pt]
+\hat{\sigma^2}^{MLE} &= \frac{(y - X\hat{\beta})' (y-X\hat{\beta})}{n}
+\end{aligned}
+$$
+
+
+\pagebreak
+%----------------------------------------------------------------------------------------
+%   Appendix
+%----------------------------------------------------------------------------------------
+\subsection*{Appendix}
+
+\subsubsection*{C3. Improtant Results on $SS_R$ and $SS_{Res}$} % Sub-sub-section
+
+
+\subsubsection*{C3.1. $SS_R$}
+
+$$
+\begin{aligned}
+SS_R &= \sum_i^n (\hat{y}_i - \bar{y})^2 \\
+&= [\hat{y} - \mathds{1} \bar{y}]' [\hat{y} - \mathds{1} \bar{y}] \\
+&= [Hy - \mathds{1} (\mathds{1}' \mathds{1})^{-1} \mathds{1} ' y]' [Hy -  \mathds{1} (\mathds{1}' \mathds{1})^{-1} \mathds{1} ' y] \\
+&= y' [H - \mathds{1} (\mathds{1}' \mathds{1})^{-1} \mathds{1} '] y
+\end{aligned}
+$$
+
+Note that $[H - \mathds{1} (\mathds{1}' \mathds{1})^{-1} \mathds{1} ']$ is \textbf{idempotent}, since $H \mathds{1} = \mathds{1}, H' = H$. ($\because \quad X'H = X'$). Thus, if $Var(\epsilon) = \sigma^2 I$,
+
+$$
+\begin{aligned}
+\frac{SS_R}{\sigma^2} &= \frac{1}{\sigma^2} y'[H - \mathds{1} (\mathds{1}' \mathds{1})^{-1} \mathds{1}' ] y \\
+&\sim \chi^2 (k; \lambda)
+\end{aligned}
+$$
+
+where 
+
+$$
+\begin{aligned}
+k &= trace \left( H - \mathds{1} (\mathds{1}' \mathds{1})^{-1} \mathds{1}'  \right) \\[8pt]
+&= trace(X'X (X'X)^{-1}) - trace(\mathds{1} (\mathds{1}' \mathds{1})^{-1} \mathds{1}') \\[8pt]
+&= tract(I_p) - trace(1) = k \\[10pt]
+\lambda &= \frac{1}{\sigma^2} \beta' X' \left[ H - \mathds{1} (\mathds{1}' \mathds{1})^{-1} \mathds{1}' \right] X \beta \\[8pt]
+&= \frac{1}{\sigma^2} \left[ \beta_0 \quad \beta_R' \right] \begin{bmatrix} 1' \\ X_R'\end{bmatrix}
+\left[ H - \mathds{1} (\mathds{1}' \mathds{1})^{-1} \mathds{1}' \right] \left[ 1 \quad X_R \right] \begin{bmatrix} \beta_0 \\ \beta_R \end{bmatrix} \\[8pt]
+&=\frac{1}{\sigma^2}\beta_R' [X_R' X_R - X_R'  \mathds{1} (\mathds{1}' \mathds{1})^{-1} \mathds{1}' X_R] \beta_R \\[8pt]
+&= \frac{1}{\sigma^2}\beta_R' [X_C' X_C] \beta_R \quad (\text{where } X_C : \text{ centered regressors})
+\end{aligned}
+$$
+
+Thus,
+
+$$
+\begin{aligned}
+\mathbb{E} (SS_R) &= \sigma^2 \left( k + \lambda \right) \\[8pt]
+&= k \sigma^2 + \beta_R' X_C' X_C \beta_R \\[10pt]
+\mathbb{E} (MS_R) &= \mathbb{E} \left( \frac{SS_R}{k} \right) = \sigma^2 + \beta_R' X_C' X_C \beta_R /k
+\end{aligned}
+$$
+
+
+%----------------------------------------------------------------------------------------------
+
+
+\subsubsection*{C3.2. $SS_{Res}$}
+
+
+$$
+\begin{aligned}
+SS_{Res} &= \sum_i^n (y_i - \hat{y}_i)^2 \\
+&= [y - \hat{y}]' [y - \hat{y}] \\
+&= [y - Hy ]' [y - Hy ] \\
+&= y' [1 - H]y 
+\end{aligned}
+$$
+
+Since $(I - H)$ : symmetric and idempotent, we have
+
+$$
+\begin{aligned}
+\frac{SS_{Res}}{\sigma^2} &= \frac{1}{\sigma^2} y' [I - H] y \sim \chi^2 (n-p) \\[8pt]
+\mathbb{E} (SS_{Res}) &= (n-p) \sigma^2 \\[8pt]
+\mathbb{E} (MS_{Res}) &= \sigma^2 \\[8pt]
+\end{aligned}
+$$
+
+
+%----------------------------------------------------------------------------------------------
+
+\subsubsection*{C3.3. Global or Overall \textit{F} Test}
+
+
+Note that  $SS_{R} \perp SS_{Res}$, since
+
+$$
+\begin{aligned}
+Cov \left([H - \mathds{1} (\mathds{1}' \mathds{1})^{-1} \mathds{1}' ] y, [I-H] y\right) &= [H - \mathds{1} (\mathds{1}' \mathds{1})^{-1} \mathds{1}' ] \sigma^2 I (I-H) \\[8pt]
+&= \sigma^2 [H - H - \mathds{1} (\mathds{1}' \mathds{1})^{-1} \mathds{1}' + \mathds{1} (\mathds{1}' \mathds{1})^{-1} \mathds{1}'] = 0
+\end{aligned}
+$$
+
+Thus,
+
+$$
+\begin{aligned}
+\frac{MS_R}{MS_{Res}} &\sim F(k, n-p; \lambda) \\[8pt]
+\mathbb{E} (MS_R) &= \sigma^2 + \frac{\beta^{\ast\prime} X_C' + X_C \beta^\ast }{k \sigma^2} \\[10pt]
+F_0 &\sim F(k, n-k-1; \lambda)
+\end{aligned}
+$$
+
+where $\lambda = \frac{1}{\sigma^2}\beta_R' [X_C' X_C] \beta_R $
+
+
+
+\subsubsection*{C3.4. Extra-Sum-of-Squares Principle}
+
+$SS_R$ is a special case of extra-sum-of-squares principle, where $X_1 =1, X_2 = X_R$, and $SS_R = R(\beta_R | \beta_0)$. Consider the model
+
+$$
+y = X\beta + \epsilon = X_1 \beta_1 + X_2 \beta_2 + \epsilon
+$$
+
+where $X_1$ : $p_1 \times 1$, $X_2$ : $p_2 \times 1$ model matrices each associated with $\beta_1, \beta_2$, where $p_1 + p_2 = p$. A common measure of the contribution of $\beta_2$ given the presence of $\beta_1$ in the model is 
+
+$$
+R( \beta_2 | \beta_1) = y' [X (X'X)^{-1}X' - X_1 (X_1' X_1)^{-1} X_1']y
+$$
+
+It is direct that 
+
+$$
+\frac{R( \beta_2 | \beta_1)/p_2}{MS_{Res}} \sim F'(p_2, n-p; \lambda)
+$$
+
+where $\lambda := \beta_2' X_2' H_{2 | 1} X_2 \beta_2/\sigma^2$.
+
+
+\subsubsection*{C3.5. Relationship of the \textit{t} Test for an Individual Coefficient and the Extra-Sum-of-Squares Principle}
+
+Squaring the $t$ test statistic for an individual coefficient is exactly equivalent to the $F$ test using the extra-sum-of-squares principle, where $X_2$ is simply the column vector of $X$ associated with the specific coefficient, $\beta_j$.
+
+Note that 
+
+$$
+\begin{aligned}
+\frac{  \hat{\beta_j^2}  }{ \mathrm{Var}(\hat{\beta_j})  } &=
+\frac{1}{\sigma^2} y' [X(X'X)^{-1}X' - X_1(X_1'X_1)^{-1}X_1']  \\[8pt]
+&= \hat{\beta_j}' [\mathrm{Var} ( \hat{\beta_j})]^{-1} \hat{\beta_j}
+\end{aligned}
+$$
+
+Letting $H_1 := X_1 (X_1' X_1)^{-1} X_1'$,
+
+$$
+\begin{aligned}
+(I - H_1)y &=  (I - H_1) X_1 \beta_1 + (I - H_1) X_2 \beta_2 + (I-H_1) \epsilon \\[10pt]
+&= (I - H_1) X_2 \beta_2 + (I - H_1) \epsilon\ \ (\because \ \ (I - H_1)X_1 &= X_1 - H_1X_1 = 0)
+\end{aligned}
+$$
+
+
+Again, letting $y^{\ast} := (I - H)y$, $X_2^{\ast} := (I- H_1) X_2$, $\epsilon^{\ast} := (I - H_1) \epsilon$, observe that
+
+$$
+\mathrm{Var} (\epsilon^{\ast} ) = \mathrm{Var} [ (I -H_1) \epsilon] = \sigma^2 [I - H_1]
+$$
+
+
+
+
+
+\pagebreak
+%----------------------------------------------------------------------------------------
+%	Section 3
+%----------------------------------------------------------------------------------------
+\section{Hypothesis Testing in Multiple Linear Regression}
+
+Two immediate questions:
+
+\begin{itemize}
+	\item Overall adequacy of the model
+	\item Importance of the specific regressors
+\end{itemize}
+
+To proceed, first we would assume $\epsilon_i \overset{iid}{\sim} N\left(0, \sigma^2 \right)$
+
+% 3.3.1. -----------------------------------------------------------------
+\subsection{Test for Significance of Regression}
+
+The test for \textbf{significance of regression} is a test to determine if there is a \textbf{linear relationship} between the response $y$ and any of the regressor variables $x_1, \cdots, x_k$, i.e. $H_0 : \beta_1 = \cdots = \beta_k = 0$. Rejection of $H_0$ implies that at least one of the regressors contributes significantly to the model.
+
+Note that the test procedure is a generalization of \textbf{ANOVA} in simple regression, where
+
+$$
+SS_T = SS_R + SS_{Res}
+$$
+
+Under $H_0$, we have 
+
+$$
+F_0 = \frac{SS_R / k}{SS_{Res}/(n-k-1)} = \frac{MS_R}{MS_{Res}} \sim F(k, n-k-1) 
+$$
+
+where $\beta^{\ast} := (\beta_1, \cdots, \beta_k)'$, and $X_C$ : centered model matrix.
+
+Note that 
+
+$$
+\begin{aligned}
+\mathbb{E} (MS_{Res}) &= \sigma^2 \\[8pt]
+\end{aligned}
+$$
+
+where we reject $H_0$ if $F_0 > F_\alpha (k, n-k-1)$. 
+
+
+
+
+\textbf{Adjusted $R^2$}, defined by
+
+$$
+R_{Adj}^2 = 1 - \frac{SS_{Res}/(n-p)}{SS_T/(n-1)}
+$$
+
+
+
+% 3.3.2. -----------------------------------------------------------------
+\subsection{Tests on Individual Regression Coefficients and Subsets of Coeffficients}
+
+Adding a variable to a regression model always causes the sum of squares for regression to increase and the residual sum of squares to decrease. The \textbf{addition of a regressor also increases the variance of $\hat{y}$}, so we must be careful to include only regressors that are of real value in explaining the response. 
+
+
+
+Suppose $H_0 : T\beta = 0$, where $T : m \times p$, such that $r$ of $m$ equations in $T \beta = 0$ are independent. Note that the \textbf{full model} is $y = X \beta + \epsilon$.
+
+We could derive the \textbf{extra sum of squares due to $\beta_2$}, where it measures the increase in $SS_R$ that results from adding the regressors $x_{k-r+1}, \cdots, x_k$ to the existing model. 
+
+$$
+\begin{aligned}
+SS_R(\beta_1) &= \hat{\beta}_1' X_1' y \\[8pt]
+SS_R(\beta_2 | \beta_1) &= SS_R (\beta) - SS_R(\beta_1)
+\end{aligned}
+$$
+
+
+
+
+$$
+SS_R (\beta_j | \beta_0, \beta_1, \cdots, \beta_{j-1}, \beta_{j+1}, \cdots, \beta_k) \ \ 1 \le j \le k
+$$
+
+which could be thought of as measuring the \textbf{contribution of $x_j$ as if it were the last variable added to the model}. 
+
+
+
+
+
+% 3.3.3. -----------------------------------------------------------------
+\subsection{Special Case of Orthogonal Columns in $X$}
+
+$$
+\begin{aligned}
+y &= X\beta + \epsilon \\[8pt]
+&= X_1 \beta_1 + X_2 \beta_2 + \epsilon
+\end{aligned}
+$$
+
+The extra SS method allows us to measure the effect of the regressors in $X_2$ conditional on those in $X_1$ by computing $SS_R(\beta_2 | \beta_1)$
+
+
+For the above model, it 
+
+$$
+\begin{bmatrix}
+X_1'X_1 & X_1' X_2 \\
+X_2'X_1 & X_2' X_2
+\end{bmatrix}
+\begin{bmatrix}
+\hat{\beta}_1 \\
+\hat{\beta}_2
+\end{bmatrix} = 
+\begin{bmatrix}
+X_1'y \\
+X_2'y
+\end{bmatrix}
+$$
+
+
+% 3.3.4. -----------------------------------------------------------------
+\subsection{Testing the General Linear Hypothesis}
+
+Suppose $H_0 : T \beta = 0$, where $T$ : $m \times p$ matrix of constants, such that only $r$ of the $m$ equations in $T \beta = 0$ are independent. The \textbf{full model} is $y = X \beta + \epsilon$, with $\hat{\beta} = (X'X)^{-1} X' y$, and the RSS for the full model is 
+
+$$
+SS_{Res} (FM) = y' y = \hat{\beta}' X' y
+$$
+
+with $n - p$ degrees of freedom. To obtain the \textbf{reduced model}, the $r$ independent equations in $T \beta = 0$ are used to solve for $r$ of the regression coefficients in the full model. 
+
+Note that
+
+$$
+F_0 = \frac{\hat{\beta}' T [ T' (X'X)^{-1} T]^{-1} T' \hat{\beta}/r}{SS_{Res}(FM)/(n-p)}
+$$
+
+
+Let $T_1$ : $p \times m$ matrix whose columns are the orthonormal bases of the column space of $T$, and define $[T_0 | T_1]$ be $p \times p$ matrix whose columns are the orthonormal bases of $R^{p}$, i.e.,
+
+$$
+\begin{aligned}
+T_0' T_0 &= I_{p - m} \\[8pt]
+T_1' T_1 &= I_m \\[8pt]
+T_0' T_1 &= 0 \\[8pt]
+\end{aligned}
+$$
+
+and there exists a regular matrix $B$ s.t. $T = T_1B$. Therefore, 
+
+
+$$
+\begin{aligned}
+X \beta &= X [T_0 T_1] [T_0 T_1]' \beta = D_0 \gamma_0 + D_1 \gamma_1 \\[8pt]
+D_0 &= XT_0, D_1 = X T_1, \gamma_0 = T_0' \beta, \gamma_1 = T_1' \beta \\[8pt]
+\end{aligned}
+$$
+
+where $rank(D_0) = p - m$, $rank(D_0) = m$, $rank([D_0 | D_1]) = p$.
+
+
+Note that 
+
+$$
+\mathrm{min}_{\beta \in R^p, T' \beta = 0} ||Y - X \beta||^2 
+= \mathrm{min}_{\gamma_0 \in R^{p-m}, \gamma_1 \in R^m} ||Y - D_0 \gamma_0 - D_1 \gamma_1||^2 + Y' H_{1 |0} Y
+$$
+
+where $H_{1 | 0}:= X(X'X)^{-1} T (T' (X'X)^{-1} T)^{-1} T' (X'X)^{-1} X'$ is the projection matrix which projects from the column space of $[D_0 | D_1]$, $col([D_0 | D_1]) = \{ D_0 \gamma_0 + D_1 \gamma_1 : \gamma_0 \in R^{p - m}, \gamma_1 \in R^m \}$, into the orthogonal complement of the column space of $D_0$, $col(D_0) = \{a \in col([D_0 | D_1]) : a' D_0 = 0 \}$. 
+
+That is direct from the fact : 
+
+$$
+\begin{aligned}
+T' \beta = 0 &\Leftrightarrow B'T_1' \beta =0 \Leftrightarrow \gamma_1 = 0 \\[10pt]
+\mathrm{min}_{\beta \in R^p, T' \beta = 0} ||Y - X \beta||^2 &= \mathrm{min}_{\gamma_0 \in R^{p-m}} ||Y - D_0 \gamma_0||^2 
+\end{aligned}
+$$
+
+And since we have $[D_0 | D_1] = X [C_0 | C_1]$, 
+
+$$
+\begin{aligned}
+col([D_0 | D_1]) &= \{ X(C_0 \gamma_0 + C_1 \gamma_1) : \gamma_0 \in R^{p-m}, \gamma_1 \in R^m \} \\[8pt]
+&= \{ X\beta : \beta in R^p \} = col(X)
+\end{aligned}
+$$
+
+and it is clear that $col(D_{1|0}) = col(S)$, where $S := X (X'X)^{-1} T$. 
+
+
+Therefore, the projection matrix from the column space of $D_0$ into the orthogonal complement $col(D_{1|0})$  is given as
+
+$$
+H_{1 |0} = S (S' S)^{-1} S' = X(X'X)^{-1} T (T' (X'X)^{-1} T)^{-1} T' (X'X)^{-1} X'
+$$
+
+
+Finally, if the hypothesis $H_0: T \beta = 0$ cannot be rejected, then it may be reasonable to estimate $\beta$ subject to the contraint imposed by $H_0$. It is unlikely that the usual least-squares estimator will automatically satisfy the constraint. In such cases a \textbf{constrained least-squares estimator} may be useful. 
+
+In \textbf{Problem 3.34}, in a model $y = X\beta + \epsilon$ subject to $T\beta = c$, it is required to show
+
+$$
+\tilde{\beta} = \hat{\beta} + (X'X)^{-1} T' [T(X'X)^{-1}T']^{-1} (c - T\hat{\beta})
+$$
+
+where $\hat{\beta} := (X' X)^{-1} X' y$.
+
+Since $S = (y- X\beta)^{-1} (y- X\beta) - 2 \lambda (T\beta - c)$, taking the derivative of $S$ w.r.t. $\beta, \lambda$, we get
+
+$$
+\begin{aligned}
+\tilde{\beta} &= (X'X)^{-1}X'y - (X'X)^{-1}T'\lambda \\
+\tilde{\lambda} &= [T(X'X)^{-1}T']^{-1} (T \hat{\beta} - c)
+\end{aligned}
+$$
+
+thus the result.
+
+
+\pagebreak
+%----------------------------------------------------------------------------------------
+%	Kaggle
+%----------------------------------------------------------------------------------------
+
+\section*{Kaggle: On Logistic Regression}
+
+\setcounter{section}{1}
+\setcounter{subsection}{0}
+
+\subsection{Models with a Binary Response Variable}
+
+\textbf{Logistic regression} is usually considered in a situation where the response variable has only two possible outcomes. 
+
+
+\subsection{Estimating the Parameters in a Logistic Regression Model}
+
+
+\subsection{Interpretation of the Parameters in a Logistic Regression Model}
+
+
+
+Furthermore, we could define the \textbf{deviance residual},
+
+$$
+d_i = \pm \left\{ 2 \left[   y_i \mathrm{ln} \left( \frac{y_i}{n_i \hat{\pi_i}} \right) +
+(n_i - y_i) \mathrm{ln} \left( \frac{n_i - y_i}{n_i (1 - \hat{\pi_i})} \right)  \right] \right\}^{1/2}
+$$
+
+whose sign is the same as the sign of the corresponding ordinary residual. It is also possible to define a \textbf{hat matrix analog} for logistic regression,
+
+$$
+H := V^{1/2} X (X' V X)^{-1} X' V^{1/2}
+$$
+
+where $V$ is the diagonal matrix and has the variances on its main diagonal, $V_{ii} = n_i \hat{\pi}_i (1 - \hat{\pi}_i)$ .
+
+
+\end{document}

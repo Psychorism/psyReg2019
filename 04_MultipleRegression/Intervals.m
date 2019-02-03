@@ -1,5 +1,4 @@
 %% Joint Confidence Region
-
 set(0, 'DefaultFigureWindowStyle', 'normal');
 Cement = readtable("../Dataset/MPV/cement.csv");
 
@@ -25,9 +24,12 @@ v = XtX(1,1)*(CementBeta(1) - x).^2 + ...
 
 
 figure;
-isosurface(x,y,z,v,p * Falpha * CementLinear.MSE);
 xlabel('{\beta_0}'); ylabel('{\beta_1}'); zlabel('{\beta_2}');
-
+h1 = patch( isosurface(x,y,z,v,p * Falpha * CementLinear.MSE) );
+h1.EdgeColor = [0.5,0,0];
+h1.FaceColor = [1,0,0];
+h1.FaceAlpha = 0.7;
+legend('Joint CI')
 
 %%
 [x, y, z] = meshgrid (-200:2:400, -2:0.04:10, -4:0.04:4);
@@ -62,12 +64,18 @@ ScheffeHits = xHitScheffe & yHitScheffe & zHitScheffe;
 ScheffeHits = reshape(ScheffeHits, size(x));
 
 figure; hold on;
-isosurface(BonferroniHits,0.5);
-isosurface(ScheffeHits,0.5);
-colormap('autumn');
-legend('Bonferroni', 'Scheffe');
-alpha(0.3); hold off;
+h1 = patch( isosurface(BonferroniHits, 0.5) );
+h1.EdgeColor = 'none';
+h1.FaceColor = [1,0,0];
+h1.FaceAlpha = 0.2;
 
+h2 = patch( isosurface(ScheffeHits, 0.5) );
+h2.EdgeColor = 'none';
+h2.FaceColor = [0,1,0];
+h2.FaceAlpha = 0.2;
+
+legend('Bonferroni', 'Scheffe');
+hold off;
 
 
 %% Minimum Volume Enclosing Ellipsoid

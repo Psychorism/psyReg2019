@@ -10,7 +10,7 @@ By @[Psychorism](https://psychorism.github.io)
 
  `Introduction to Linear Regression Analysis` (by Montgomery, Peck, Vining).
 
- You can download the dataset by installing `MPV` R package.
+ You could download the dataset by installing `MPV` R package.
 
 Week|Content
 -|-
@@ -19,16 +19,26 @@ Week|Content
 03|Chapter 3 : Multiple Linear Regression (1)
 04|Chapter 3 : Multiple Linear Regression (2)
 05|Chapter 4 : Model Adequacy Checking
-06|Chapter 6 : Diagnostics for Leverage and Influence
-07|Chapter 9 : Multicollinearity
-08|Chapter 13 : Generalized Linear Models (1)
-09|Chapter 13 : Generalized Linear Models (2)
+06|Chapter 5, 6, 7 : Transformations, Diagnostics, Polynomials
+07|Chapter 8, 9 : Indicators, Multicollinearity
+08|Chapter 12, 13 : Nonlinear Regression, GLM
 
 
 ### Kaggle
 
 Kaggle for in-practice data analysis in parallel with the textbook.
 
-[Titanic](https://www.kaggle.com/c/titanic) Data Analysis
+[Titanic](https://www.kaggle.com/c/titanic) Data Analysis was done. This included the following topics:
+
+Week|Content
+-|-
+01|Confounding Variables
+02|Equivalence of t test, ANOVA, and linear regression 
+03|Classification via Logistic Regression
+04|Classification via Random Forest
+05|Bayesian Regression 
+06|Artifical Neural Network
+07|Support Vector Machine
+08|-
 
  

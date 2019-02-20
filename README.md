@@ -10,7 +10,7 @@ By @[Psychorism](https://psychorism.github.io)
 
  `Introduction to Linear Regression Analysis` (by Montgomery, Peck, Vining).
 
- You could download the dataset by installing `MPV` R package.
+ You could download the datasets by installing `MPV` R package.
 
 Week|Content
 -|-
@@ -26,9 +26,9 @@ Week|Content
 
 ### Kaggle
 
-Kaggle for in-practice data analysis in parallel with the textbook.
+`Kaggle` for in-practice data analysis in parallel with studying the textbook.
 
-[Titanic](https://www.kaggle.com/c/titanic) Data Analysis was done. This included the following topics:
+[Titanic](https://www.kaggle.com/c/titanic) data analysis was done. The following topics were adressed:
 
 Week|Content
 -|-

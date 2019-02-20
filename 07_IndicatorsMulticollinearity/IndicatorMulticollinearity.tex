@@ -1,0 +1,427 @@
+
+\documentclass[12pt]{article} 
+
+\usepackage{geometry}
+\geometry{a4paper} 
+
+\usepackage{graphicx} 
+\usepackage{enumitem}
+\usepackage{booktabs}
+
+\usepackage{float} 
+\usepackage{wrapfig} 
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{dsfont}
+
+
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{caption}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{%
+  \parbox{\textwidth}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}\vskip-2pt}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+\lstset{frame=lrb,xleftmargin=\fboxsep,xrightmargin=-\fboxsep}
+
+\linespread{1.2} 
+\setlength{\parskip}{\baselineskip} % vertical spaces
+\setlength\parindent{0pt} % remove all indentation from paragraphs
+
+
+
+\begin{document}
+
+\title{\textbf{Indicators \& Multicollinearity}}
+\author{Hyunwoo Gu}
+\date{}
+
+\maketitle
+
+%----------------------------------------------------------------------------------------
+%   Section 1
+%----------------------------------------------------------------------------------------
+\section{General Concept of Indicator Variables}
+
+In general, a qualitative variable has no natural scale of measurement. We must assign a set of levels to a qualitative variable to account for the effect that the variable may have on the response. This is done via the use of \textbf{indicator variables}.
+
+
+%----------------------------------------------------------------------------------------
+%   Section 2
+%----------------------------------------------------------------------------------------
+\section{Comments on the Use of Indicator Variables}
+
+\subsection{Indicator Variables versus Regression on Allocated Codes}
+
+
+\subsection{Indicator Variables as a Substitute for a Quantitative Regressor}
+
+
+%----------------------------------------------------------------------------------------
+%   Section 3
+%----------------------------------------------------------------------------------------
+\section{Regression Approach to ANOVA}
+
+\textbf{ANOVA} is a technique frequently used to analyze data from \textbf{planned/designed experiments}. \textbf{ANOVA} explains the variation of the observations of a characteristic $X$ by a single factor, each level of whose is called a \textbf{treatment}. 
+
+$$
+\begin{aligned}
+X_{ij} &= \bar{\mu} + \tau_i + \epsilon_{ij} \\[10pt]
+\end{aligned}
+$$
+
+where $\sum_i^k n_i \tau_i = 0, \epsilon_{ij} \sim NID(0, \sigma^2)$ and $i = 1, \cdots, k, j=1, \cdots, n_i$. Main problem is to test whether all $\tau_i'$s are equal, i.e., there is no \textbf{treatment effect}.
+
+\textbf{Any ANOVA problem can be treated as a regression problem where all of the regressors are indicator variables}. To show this, let
+
+$$
+\begin{aligned}
+X &= \begin{bmatrix} 1_{n_1} & 1_{n_1} & 0 & \cdots & 0 \\
+					 1_{n_2} & 0 & 1_{n_1} & \cdots & 0 \\ 
+					 \vdots  &   &         & \ddots & \vdots \\
+					 1_{n_k} & 0 & 0       & \cdots & 1_{n_k} \end{bmatrix} \\[10pt]
+Y &= \left(X_{11}, \cdots, X_{1n_1}; \cdots; X_{k1}, \cdots, X_{kn_k} \right)' \\[8pt]
+\epsilon &= \left( \epsilon_{11}, \cdots, \epsilon_{1n_1}; \cdots; \epsilon_{k1}, \cdots, \epsilon_{kn_k} \right)' \\[8pt]
+\beta &= \left( \bar{\mu}, \tau_1, \cdots, \tau_k \right)' \\[8pt]
+c &= \left( 0, n_1, \cdots, n_k\right)
+\end{aligned}
+$$
+
+
+then it becomes clear that the model has the alternative form
+
+$$
+\begin{aligned}
+Y &= X\beta + \epsilon\\[8pt]
+c' \beta &= 0 \\[8pt]
+\epsilon &\sim N_n (0, \sigma^2 I)
+\end{aligned}
+$$
+
+where $X$ is called a \textbf{design matrix}. Note that 
+
+$$
+\begin{aligned}
+SS_R (\beta) &= \hat{\beta}' X' y \\[8pt]
+SS_{Res} &= \sum_i \sum_j (y_{ij} - \bar{y}_i)^2 \\[8pt]
+F_0 &= \frac{SS_R(\beta_1, \cdots, \beta_k | \beta_0)/k}{SS_{Res}/(n-k-1)} = \frac{MS_{Treat}}{MS_{Res}}
+\end{aligned}
+$$
+
+
+Under the null $H_0 : \tau_1 = \cdots = \tau_k = 0$, 
+
+$$F_0 \sim F(k, n-k-1)$$
+
+
+\subsection{ANOVA is \textit{t}-test when $k=2$}
+
+Note that in \textbf{ANOVA}, $F_0 = \frac{MST}{MS_{Res}}$, and in \textbf{\textit{t}-test}, $t = \frac{(\bar{y}_1 - \bar{y}_2)^2} {S_p^2 (1/n_1 + 1/n_2)}$. Let us show the two are equivalent.
+
+First note that 
+
+$$
+\begin{aligned}
+MS_{Res} &= \frac{SSE}{n-2} = \frac{\sum_i^2 \sum_j^{n_i} (y_{ij} - \bar{y}_i)^2}{n-2} \\[8pt]
+&= \frac{(n_1 - 1)S_1^2 + (n_2 - 1)S_2^2}{n_1 + n_2 - 2} = S_p^2
+\end{aligned}
+$$
+
+since $S_i^2 = \frac{\sum_j^{n_i} (y_{ij} - \bar{y}_i)^2}{n_i - 1}$ and $n = n_1 + n_2$.
+
+Next, note that 
+
+$$
+\begin{aligned}
+MST &= SST = \sum_i^2 n_i (\bar{y}_i - \bar{y})^2 \\[8pt]
+&= n_1 \left( \bar{y}_1 - \frac{n_1\bar{y}_1 + n_2 \bar{y}_2}{n} \right)^2 + n_2 \left( \bar{y}_2 - \frac{n_1\bar{y}_1 + n_2 \bar{y}_2}{n} \right)^2 \\[8pt]
+&= \frac{n_1 n_2^2}{n^2} (\bar{y}_1 - \bar{y}_2)^2 + \frac{n_2 n_1^2}{n^2} (\bar{y}_1 - \bar{y}_2)^2 \\[8pt]
+&= \frac{1}{1/n_1 + 1/n_2} (\bar{y}_1 - \bar{y}_2)^2
+\end{aligned}
+$$
+
+where the transition from the second to third line makes sense since, WLOG,
+
+$$
+n_1 \left( \bar{y}_1 - \frac{n_1\bar{y}_1 + n_2 \bar{y}_2}{n} \right)^2 = n_1 \left( \frac{(n-n_1) \bar{y}_1 - n_2 \bar{y}_2}{n} \right)^2
+$$
+
+
+Therefore, by combining the knowledge that $T^2 \sim F$, we get the \textbf{equivalence}.
+
+
+
+\pagebreak
+\section*{Multicollinearity}
+\setcounter{section}{0}
+\bigskip
+
+%----------------------------------------------------------------------------------------
+%	Section 1
+%----------------------------------------------------------------------------------------
+\section{Introduction}
+
+Regressors are called \textbf{orthogonal} if there is no linear relationship between them. In this case, the following inferences could be made relatively easily. 
+
+\begin{itemize}
+	\item Identifying the relative effects of the regressors
+	\item Prediction and/or estimation
+	\item Selection of an appropriate set of variables for the model
+\end{itemize}
+
+On the contrary, 
+
+
+%----------------------------------------------------------------------------------------
+%	Section 2
+%----------------------------------------------------------------------------------------
+\section{Sources of Multicollinearity}
+
+
+
+
+%----------------------------------------------------------------------------------------
+%	Section 3
+%----------------------------------------------------------------------------------------
+\section{Effects of Multicollinearity}
+
+
+$$
+\begin{aligned}
+y &= \beta_1 x_1 + \beta_2 x_2 + \epsilon \\[10pt]
+(X'X)\hat{\beta} &= X'y \\[8pt]
+\begin{bmatrix} 1 & r_{12} \\ r_{12} & 1 \end{bmatrix} \begin{bmatrix} \hat{\beta_1} & \hat{\beta_2} \end{bmatrix} &= \begin{bmatrix} r_{1y} & r_{2y} \end{bmatrix}
+\end{aligned}
+$$
+
+Note that 
+
+$$
+\begin{aligned}
+C &= (X'X)^{-1} = \begin{bmatrix} \frac{1}{1-r_{12}^2} & \frac{-r_{12}}{1-r_{12}^2} \\
+ \frac{-r_{12}}{1-r_{12}^2} & \frac{1}{1-r_{12}^2}  \end{bmatrix} \\[10pt] 
+ \hat{\beta_1} &= \frac{r_{1y} - r_{12} r_{2y} }{ 1 - r_{12}^2}, \ \ \hat{\beta_2} = \frac{r_{2y} - r_{12} r_{1y} }{ 1 - r_{12}^2}
+\end{aligned}
+$$
+
+
+
+
+
+$$
+ = 
+$$
+
+
+
+
+%----------------------------------------------------------------------------------------
+%	Section 4
+%----------------------------------------------------------------------------------------
+\section{Multicollinearity Diagnostics}
+
+
+\subsection{Examination of the Correlation Matrix}
+
+A very simple measure of multicollinearity is inspection of the off-diagonal elements $r_{ij}$ in $X'X$. If regressors $x_i$, $x_j$ are nearly linearly dependent, then $|r_{ij}|$ will be near unity. 
+
+
+
+
+Examining the simple correlations $r_{ij}$ between the regressors is helpful in detecting near-linear dependence between \textbf{pairs of regressors} only. 
+
+
+\subsection{Variance Inflation Factors}
+
+The diagonal elements of $C = (X'X)^{-1}$ matrix are very useful in detecting multicollinearity. Recall that $C_{jj} = (1 - R_j^2)^{-1}$, where $R_j^2$ is the coefficient of determination obtained when $x_j$ is regressed on the remaining $p-1$ regressors. 
+
+
+The VIF for each term in the model measures the combined effect of the dependences among the regressors on the vairance of that term. 
+
+
+BTW, the length of the normal theory confidence interval on the $j$th regression coefficient may be written as 
+
+$$
+L_j = 2 (C_{jj} \sigma^2)^{1/2} t_{\alpha/2} (n-p-1)
+$$
+
+and the length of the corresponding interval based on an \textbf{orthogonal reference design} with the same sample size and RMS values as the original design is 
+
+$$
+L^\ast = 2 \sigma t_{\alpha/2} (n-p-1)
+$$
+
+so note that $L_j / L^\ast = C_{jj}^{1/2}$. Thus the square root of the $j$th VIF indicates \textbf{how much longer the confidence interval for the $j$th regression coefficient is because of multicollinearity.} 
+
+
+
+
+\subsection{Eigensystem Analysis of $X'X$}
+
+The \textbf{eigenvalues} of $X'X$, say $\lambda_1, \cdots, \lambda_p$ can be used to measure the extent of multicollinearity in the data. If there are one or more near-linear dependences in the data, then one or more of the characteristic roots will be small, and vice versa. Define the \textbf{condition number} and \textbf{condition indices} of $X'X$, 
+
+
+$$
+\begin{aligned}
+\kappa &= \frac{\lambda_{max}}{\lambda_{min}} \\[8pt]
+\kappa_j &= \frac{\lambda_{max}}{\lambda_j}
+\end{aligned}
+$$
+
+If $\kappa$ exceeds $1000$, severe multicollinearity is indicated. 
+
+\textbf{Eigensystem analysis} can also be used to identify the nature of the near-linear dependences in data. $X'X$ matrix may be decomposed as 
+
+$$
+X'X = T \Lambda T'
+$$
+
+where $\Lambda$ is $p \times p$ diagonal matrix whose main diagonals are the \textbf{eigenvalues} $\lambda_j$ of $X'X$ and $T$ is $p \times t$ orthogonal matrix whose columns are \textbf{eigenvectors} of $X'X$. 
+
+
+$$
+X = UDT'
+$$
+
+where $U$ is $n \times p$, $T$ is $p \times p$, $U'U = I_p$, $T'T=I_p$, and $D$ : $p \times p$ diagonal matrix with nonnegative diagonal elements $\mu$. The $\mu_j$ are called the \textbf{singular values} of $X$ and $X = UDT'$ is called the \textbf{singular-value decomposition} of $X$. 
+
+Note that $X'X = (UDT')'(UDT') = TD^2T' = T\Lambda T' $, so that the squares of the singular values of $X$ are the eigenvalues of $X'X$. 
+
+Also, Ill-conditioning in $X$ is reflected in the size of the singular values. The covariance of $\hat{\beta}$ is
+
+$$
+\begin{aligned}
+\mathrm{Var} (\hat{\beta}) &= \sigma^2 (X'X)^{-1} = \sigma^2 T \Lambda^{-1}T' \\[8pt]
+\mathrm{Var} (\hat{\beta}_j) &= \sigma^2 \sum_i^p \frac{t_{ji}^2 }{\mu_i^2} = \sigma^2 \sum_i^p \frac{t_{ji}^2 }{\lambda_i}  \\[10pt]
+VIF_j &= \sum_i^p \frac{t_{ji}^2 }{\mu_i^2} = \sum_i^p \frac{t_{ji}^2 }{\lambda_i}  \\[10pt]
+\end{aligned}
+$$
+
+Clearly, one or more small singular values can dramatically inflate the variance of $\hat{\beta}_j$. 
+
+
+
+%----------------------------------------------------------------------------------------
+%	Section 5
+%----------------------------------------------------------------------------------------
+\section{Methods for Dealing with Multicollinearity}
+
+\subsection{Collecting Additional Data}
+
+However, collecting additional data is not always possible because of \textbf{economic constraints} or the studied process is \textbf{no longer available} for sampling.
+
+
+\subsection{Model Respecification}
+
+One approach to model respecification is \textbf{variable elimination}. 
+
+
+\subsection{Ridge Regression}
+
+
+$$
+\begin{aligned}
+&= \\[8pt]
+\end{aligned}
+$$
+
+
+
+\subsection{Principal-Component Regression}
+
+Biased estimators of regression coefficients can also be obtained by using a procedure known as \textbf{principal-component regression}. Note that 
+
+$$
+\begin{aligned}
+y &=  Z \alpha + \epsilon \\[8pt]
+Z &=  XT, \ \ \alpha = T'\beta, \ \ T'X'XT = Z'Z = \Lambda
+\end{aligned}
+$$
+
+where the columns of $Z:= [Z_1, Z_2, \cdots, Z_p]$, which define a new set of orthogonal regressors, are referred to as \textbf{principal components}. Note that 
+
+$$
+\begin{aligned}
+\hat{\alpha} &= (Z'Z)^{-1}Z'y = \Lambda^{-1}Z'y \\[8pt]
+\mathrm{Var}(\hat{\alpha})
+\end{aligned}
+$$
+
+
+\pagebreak
+%----------------------------------------------------------------------------------------
+%	Problems
+%----------------------------------------------------------------------------------------
+
+\section*{Problems}
+
+\subsubsection*{Problem 3.23.}
+
+
+
+\subsubsection*{Problem 3.35.} Suppose we have fit $\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x_1$, but the response is also affected by $x_2$ such that the true regression function is 
+
+
+Let $R_j^2$ be the coefficient of determination when we regress the $j$th regressor on the other $k-1$ regressors. Show that the $j$th variance inflation factor may be expressed as 
+
+$$
+\frac{1}{1-R_j^2}
+$$
+
+
+$$
+\mathbb{E}(y) = \beta_0 + \beta_1 x_1 + \beta_2 x_2
+$$
+
+\textbf{Is the LSE of the slope of the original model \textbf{unbiased}? Show the bias.}
+
+\bigskip
+
+False. Note that $\hat{\beta}_1 = \frac{S_{xy}}{S_{xx}} = y$, and $\mathbb{E}(y) = \beta_0 + \beta_1 x_1 + \beta_2 x_2$. Thus $$\beta_1 - \mathbb{E} (\hat{\beta}_1 ) = - \frac{\sum (x_{i1} - \bar{x})x_{i2}}{S_{xx}}$$
+
+
+\subsubsection*{Problem 2.29.} Suppose we are fitting a straight line and wish to make SE of slope as small as possible. Suppose the ROI for $x$ is $-1 \le x \le 1$. \textbf{Where sould observations $x_1, \cdots, x_n$ be taken?}
+
+\bigskip
+
+\subsubsection*{Problem 2.33.} Consider the LS residuals $e_i = y_i - \hat{y}_i$ from simple regression. \textbf{Find $Var(e_i)$, and discuss whether it is constant.}
+
+\bigskip
+
+We have
+
+$$
+\begin{aligned}
+\mathrm{Var}(e_i) &= \mathrm{Var}(y_i) + \mathrm{Var}(\hat{y}_i) - 2 \mathrm{Cov}(y_i, \hat{y}_i) \\[8pt]
+&= \sigma^2 (1 - 1/n - (x_i - \bar{x})^2/S_{xx})
+\end{aligned}
+$$
+
+\pagebreak
+%----------------------------------------------------------------------------------------
+%	Kaggle
+%----------------------------------------------------------------------------------------
+
+\section*{Kaggle: On Support Vector Machine}
+
+\setcounter{section}{1}
+\setcounter{subsection}{0}
+
+
+\subsection{Linear Hard SVM}
+
+
+\subsection{Linear Soft SVM}
+
+
+\subsection{Reproducing Kernel Hilbert Space}
+
+Hilbert space : complete, inner product, linear 
+
+
+
+
+
+\end{document}

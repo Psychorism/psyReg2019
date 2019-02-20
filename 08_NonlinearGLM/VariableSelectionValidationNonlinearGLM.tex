@@ -1,0 +1,434 @@
+\documentclass[12pt]{article} 
+
+\usepackage{geometry}
+\geometry{a4paper} 
+
+\usepackage{graphicx} 
+\usepackage{enumitem}
+\usepackage{booktabs}
+
+\usepackage{float} 
+\usepackage{wrapfig} 
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{dsfont}
+
+
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{caption}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{%
+  \parbox{\textwidth}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}\vskip-2pt}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+\lstset{frame=lrb,xleftmargin=\fboxsep,xrightmargin=-\fboxsep}
+
+
+\linespread{1.2} 
+
+\setlength\parindent{0pt} % Uncomment to remove all indentation from paragraphs
+
+
+
+
+\begin{document}
+
+\title{\textbf{Variable Selection, Validation, \\  Nonlinear Regression, \& GLM}}
+\author{Hyunwoo Gu}
+\date{}
+
+\maketitle
+
+
+\section*{Variable Selection}
+%----------------------------------------------------------------------------------------
+%	Section 1
+%----------------------------------------------------------------------------------------
+\section{Introduction}
+
+\subsection{Model-Building Problem}
+
+In most practical problems, especially those involving historical data, the analyst has a rather large pool of possible \textbf{candidate regressors}, of which only a few are likely to be important. Finding an appropriate subset of regressors for the model is often called the \textbf{variable selection problem}.
+
+\begin{itemize}
+	\item We would like the model to include as many regressors as possible so that the information content in these factors can influence the predicted value of $y$.
+	\item We want the model to include as few regressors as possible because \textbf{the variance of the prediction increases as the number of regressors increases}.
+\end{itemize}
+
+The process of finding a model that is a compromise between these two objectives is called selecting the “best” regression equation.
+
+
+
+\subsection{Consequences of Model Misspecification}
+
+\subsection{Criteria for Evaluating Subset Regression Models}
+
+
+%----------------------------------------------------------------------------------------
+%	Section 2
+%----------------------------------------------------------------------------------------
+\section{Computational Techniques for Variable Selection}
+
+\subsection{All Possible Regressions}
+
+\subsection{Stepwise Regression Methods}
+
+
+%----------------------------------------------------------------------------------------
+%	Section 3
+%----------------------------------------------------------------------------------------
+\section{Strategy for Variable Selection and Model Building}
+
+
+
+
+\pagebreak
+\section*{Validation of Regression Models}
+\setcounter{section}{0}
+\bigskip
+
+%----------------------------------------------------------------------------------------
+%	Section 11.1
+%----------------------------------------------------------------------------------------
+\section{Introduction}
+
+Unlike \textbf{model adequacy checking}, which includes residual analysis, testing for lack of fit, searching for high-leverage or overly influential observations, and other internal analyses that investigate the fit of the regression model to the available data, \textbf{model validation} is directed toward determining if the model will \textbf{function successfully in its intended operating environment.}
+
+
+%----------------------------------------------------------------------------------------
+%	Section 11.2
+%----------------------------------------------------------------------------------------
+\section{Validation Techniques}
+
+\begin{itemize}
+	\item 
+\end{itemize}
+
+
+\subsection{Analysis of Model Coefficients and Predicted Values}
+
+The coefficients in the final regression model should be studied to determine if they are \textbf{stable} and if their \textbf{signs and magnitudes are reasonable}.
+
+
+\subsection{Collecting Fresh Data-Confirmation Runs}
+
+
+
+%% 11.2.3-----------------------------------------------------------------------------------------
+\subsection{Data Splitting}
+
+The \textbf{estimation data} are used to build the regression model, whereas the \textbf{prediction data} are then used to study the predictive ability of the model. Sometimes data splitting is called \textbf{cross validation}. 
+
+
+
+A potential disadvantage to these 
+
+
+
+\begin{itemize}
+	\item Data splitting \textbf{reduces the precision} with which regerssion coefficients are estimated. That is, the standard errors of the regression coefficients obtained from the estimation dataset will be larger than they would have benn if all the data had been used to estimate the coefficients. 
+	\item \textbf{Double-cross validation} may be useful in some problems.
+\end{itemize}
+
+
+%----------------------------------------------------------------------------------------
+%	Section 3
+%----------------------------------------------------------------------------------------
+\section{Data From Planned Experiments}
+
+When planned experiments are used to collect data, it is usually desirable to perform additional trials for use in testing the predictive performance of the model. In the experimental design literature, these extra trials are called \textbf{confirmation runs}. 
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagebreak
+\section*{Nonlinear Regression}
+\setcounter{section}{0}
+\bigskip
+
+
+There are many problems in engineering and the sciences where the response variable and the predictor variables are related through a known \textbf{nonlinear} function, which leads to a \textbf{nonlinear regression model}. The usual approach is to directly minimize the residual sum of squares by an iterative procedure. 
+
+%----------------------------------------------------------------------------------------
+%	Section 12.1
+%----------------------------------------------------------------------------------------
+\section{Linear and Nonlinear Regression Models}
+
+\subsection{Linear Regression Models}
+
+In previous chapters we have concentrated on the \textbf{linear regression model}
+
+$$
+y = \beta_0 + \beta_1 x_1 + \cdots + \beta_k x_k + \epsilon
+$$
+
+These models include not only the first-order relationships, but also polynomial models and other more complex relationships. These models are called \textbf{linear regression models} because they are \textbf{linear in the unknown parameters}, $\beta_j, j=1, \cdots, k$
+
+We may write the linear regression model above in a general form as
+
+$$
+\begin{aligned}
+y &= x'\beta + \epsilon \\
+&= f(x, \beta) + \epsilon
+\end{aligned}
+$$
+
+where $x' = [1, x_1, \cdots, x_k]$. Since the expected value of the model errors is zero, 
+
+$$
+\begin{aligned}
+\mathbb{E}(y) &= \mathbb{E} [x'\beta + \epsilon] \\
+&= f(x, \beta)
+\end{aligned}
+$$
+
+where $f(x, \beta)$ is usually referred to as the \textbf{expectation function} for the model. Obviously, the expectation function here is just a linear function of the unknown parameters. 
+
+
+\subsection{Nonlinear Regression Models}
+
+Any model that is not linear in the unknown parameters is a \textbf{nonlinear regression model}. For example, the model
+
+$$
+y = \theta_1 e^{\theta_2 x} + \epsilon
+$$
+
+is not linear in the unknown parameters $\theta_1, \theta_2$. In general, we will write the nonlinear regression model as
+
+$$
+y = f(x, \theta) + \epsilon
+$$
+
+where $\theta$ is a $p \times 1$ vector of unknown parameters and $\epsilon$ is an uncorrelated random error term with $\mathbb{E}(\epsilon) = 0$ and $\mathrm{Var}(\epsilon)=\sigma^2$. We also typically assume that the errors are normally distributed, as in linear regression. Since
+
+$$
+\begin{aligned}
+\mathbb{E}(y) &= \mathbb{E} [f(x, \theta) + \epsilon] \\
+&= f(x, \theta)
+\end{aligned}
+$$
+
+we call $f(x, \theta)$ the \textbf{expectation function} for the nonlinear regression model. Note that in a nonlinear regression model, at least one of the derivatives of the expectation function with respect to the parameters depends on at least one of the parameters.
+
+
+%----------------------------------------------------------------------------------------
+%	Section 12.2
+%----------------------------------------------------------------------------------------
+\section{Origins of Nonlinear Models}
+
+This section outlines how the differential equations that form the heart of the theory describing physical behavior lead to nonlinear models.
+
+%----------------------------------------------------------------------------------------
+%	Section 12.3
+%----------------------------------------------------------------------------------------
+\section{Nonlinear Least Squares}
+
+We have observed previously that the method of least squares in linear regression involves \textbf{minimizing the least-squares function}
+
+$$
+S(\beta) = \sum_{i=1}^n \left[ y_i - \left( \beta_0 + \sum_{j=1}^k \beta_k x_{ij} \right) \right]^2
+$$
+
+Because this is a linear regression model, when we differentiate $S(\beta)$ with respect to the unknown parameters and equate the derivatives to zero, the resulting normal equations are linear equations, and consequently, they are easy to solve.
+
+Now consider the \textbf{nonlinear regression} situation. The model is
+
+$$
+y_i = f(x_i, \theta) + \epsilon_i
+$$
+
+where $x_i' := [1, x_{i1}, \cdots, x_{ik}]$ for $i = 1, \cdots, n$. The least-squares function is 
+
+$$
+S(\theta) = \sum_{i=1}^n \left[ y_i - f(x_i, \theta) \right]^2
+$$
+
+To find the least-squares estimates we must differentiate the above with respect to each element of $\theta$. This will provide a set of p normal equations for the nonlinear regression situation. The normal equations are
+
+$$
+\sum_{i=1}^n [y_i - f(x_i, \theta)] \left[  \frac{\partial f(x_i, \theta) }{\partial \theta_j } \right]_{\theta = \hat{\theta}} = 0
+$$
+
+for $j = 1, \cdots, p$. 
+
+
+\subsubsection*{Geometry of Linear and Nonlinear Least Squares}
+
+
+
+\subsubsection*{Maximum-Likelihood Estimation}
+
+
+
+
+%----------------------------------------------------------------------------------------
+%	Section 12.4
+%----------------------------------------------------------------------------------------
+\section{Transformation to a Linear Model}
+
+It is sometimes useful to consider a \textbf{transformation} that induces linearity in the model expectation function. 
+
+
+$$
+\begin{aligned}
+y &= f(x, \theta) + \epsilon \\
+&= \theta_1 e^{\theta_2 x} + \epsilon \\[10pt]
+\mathrm{ln}\left( \mathbb{E}(y) \right) &= \mathrm{ln} \theta_1 + \theta_2 x
+\end{aligned}
+$$
+
+Thus, we might be able to write the model as follows.
+
+$$
+\begin{aligned}
+\mathrm{ln}(y) = \mathrm{ln}(\theta_1) + \theta_2 x + \epsilon \\
+&= \beta_0 + \beta_1 x + \epsilon
+\end{aligned}
+$$
+
+We might consider using simple \textbf{linear} regression to estimate β0 and β1. However, the linear least-squares estimates of the parameters in the above model will not in general be equivalent to the nonlinear parameter estimates in the original model. The reason is that in the original nonlinear model least squares implies minimization of the sum of squared residuals on $y$, whereas \textbf{in the transformed model we are minimizing the sum of squared residuals on $\mathrm{ln} y$}.
+
+Note that in the above original model the error structure is additive, so taking logarithms cannot produce the above model. If the error structure is multiplicative, say
+
+$$
+y = \theta_1 e^{\theta_2 x} \epsilon
+$$
+
+then taking logarithms will be appropriate, since
+
+$$
+\begin{aligned}
+\mathrm{ln} y &= \mathrm{ln}\theta_1 + \theta_2 x + \mathrm{ln} \epsilon \\
+&= \beta_0 + \beta_1 x + \epsilon^\ast
+\end{aligned}
+$$
+
+and if $\epsilon^\ast$ follows a normal distribution, all the standard linear regression model properties and associated inference will apply.
+
+A nonlinear model that can be transformed to an equivalent linear form is said to be \textbf{intrinsically linear}. However, the issue often revolves around the error structure, namely, do the standard assumptions on the errors apply to the original nonlinear model or to the linearized one? This is sometimes not an easy question to answer.
+
+
+%----------------------------------------------------------------------------------------
+%	Section 12.5
+%----------------------------------------------------------------------------------------
+\section{Parameter Estimation in a Nonlinear System}
+
+\subsection{Linearization}
+
+A method widely used in computer algorithms for nonlinear regression is \textbf{linearization} of the nonlinear function followed by the Gauss-Newton iteration method of parameter estimation. Linearization is accomplished by a \textbf{Taylor series expansion} of $f(x_i, \theta)$ about the point $\theta_0' = [\theta_{10}, \cdots, \theta_{p0}]$ with only the linear terms retained. 
+
+$$
+f(x_i, \theta) = f(x_i, \theta_0) + \sum_{j=1}^p \left[ \frac{\partial f(x_i, \theta)}{\partial \theta_j} \right]_{\theta = \theta_0} (\theta_j - \theta_{j0})
+$$
+
+
+If we set 
+
+$$
+\begin{aligned}
+f_i^0 &= f(x_i, \theta_0) \\[8pt]
+\end{aligned}
+$$
+
+
+We may also estimate the asymptotic (large-sample) covariance matrix of the parameter vector by
+
+\subsection{Other Parameter Estimation Methods}
+
+
+\subsubsection*{Method of Steepest Descent}
+
+The method of steepest descent attempts to find the global minimum on the residual-sum-of-squares function by \textbf{direct minimization}. The objective is to move from an initial starting point $\theta_0$ in a vector direction with components given by the derivatives of the residual-sum-of-squares function with respect to the elements of $\theta$. Usually these derivatives are estimated by fitting a first-order or planar approximation around the point $\theta_0$. The regression coefficients in the first-order model are taken as approximations to the first derivatives.
+
+\subsubsection*{Fractional Increments}
+
+
+\subsubsection*{Marquardt’s Compromise}
+
+
+
+
+\subsection{Starting Values}
+
+Good starting values, that is, values of $\theta_0$ that are close to the true parameter values, will minimize convergence difficulties. Modifications to the linearization procedure such as Marquardt’s compromise have made the procedure less sensitive to the choice of starting values, but it is always a good idea to select $\theta_0$ carefully. A poor choice could cause convergence to a local minimum on the function, and we might be completely unaware that a suboptimal solution has been obtained.
+
+
+%----------------------------------------------------------------------------------------
+%	Section 12.7
+%----------------------------------------------------------------------------------------
+\section{Statistical Inference in Nonlinear Regression}
+
+That is, in nonlinear regression the least-squares (or maximum-likelihood) estimates of the model parameters do not enjoy any of the attractive properties that their counterparts do in linear regression, such as \textbf{unbiasedness, minimum variance, or normal sampling distributions}. Statistical inference in nonlinear regression depends on \textbf{large-sample or asymptotic results}. The large-sample theory generally applies for both normally and nonnormally distributed errors.
+
+
+
+
+%----------------------------------------------------------------------------------------
+%	Section 12.8
+%----------------------------------------------------------------------------------------
+\section{Examples of Nonlinear Regression Models}
+
+
+\subsubsection*{Logistic growth model}
+
+
+\subsubsection*{Gompertz model}
+
+
+\subsubsection*{Weibull growth model}
+
+
+\pagebreak
+%----------------------------------------------------------------------------------------
+%	Problems
+%----------------------------------------------------------------------------------------
+
+\section*{Problems}
+
+\subsubsection*{Problem 3.23.}
+
+
+
+\pagebreak
+\section*{GLM}
+\setcounter{section}{0}
+\bigskip
+
+%----------------------------------------------------------------------------------------
+%	Section 12.1
+%----------------------------------------------------------------------------------------
+\section{Introduction}
+
+
+
+\pagebreak
+%----------------------------------------------------------------------------------------
+%	Kaggle
+%----------------------------------------------------------------------------------------
+
+\section*{Kaggle: On Support Vector Machine}
+
+\setcounter{section}{1}
+\setcounter{subsection}{0}
+
+
+\subsection{Linear Hard SVM}
+
+
+\subsection{Linear Soft SVM}
+
+
+\subsection{Reproducing Kernel Hilbert Space}
+
+Hilbert space : complete, inner product, linear 
+
+
+
+
+
+
+\end{document}
